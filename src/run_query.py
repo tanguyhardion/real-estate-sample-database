@@ -1,10 +1,10 @@
 import sqlite3
 
 # define the SQL query statement
-QUERY_STATEMENT = "SELECT t.name, t.phone, t.email, SUM(l.rent) AS total_rent_paid FROM Tenant t JOIN Lease l ON t.id = l.tenant_id GROUP BY t.name ORDER BY total_rent_paid DESC LIMIT 1;"
+QUERY_STATEMENT = "SELECT * FROM Tenant LIMIT 10;"
 
 # connect to the database
-connection = sqlite3.connect("real_estate.db")
+connection = sqlite3.connect("database/real_estate.db")
 cursor = connection.cursor()
 
 # execute the query

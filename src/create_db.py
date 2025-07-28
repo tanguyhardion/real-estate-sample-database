@@ -2,6 +2,9 @@ import sqlite3
 import random
 from datetime import datetime, timedelta
 import uuid
+from faker import Faker
+
+fake = Faker()
 
 DB_PATH = "database/real_estate.db"
 
@@ -300,113 +303,7 @@ c.execute(
 
 conn.commit()
 
-# sample data generation
-fund_names = [f"Real Estate Fund {i}" for i in range(1, 26)]  # Increased to 25 funds
-manager_names = [
-    "John Smith",
-    "Sarah Johnson",
-    "Michael Brown",
-    "Emma Davis",
-    "James Wilson",
-    "Lisa Anderson",
-    "David Taylor",
-    "Jennifer Martinez",
-    "Robert Garcia",
-    "Maria Rodriguez",
-    "Christopher Lee",
-    "Amanda White",
-    "Daniel Harris",
-    "Jessica Clark",
-    "Matthew Lewis",
-    "Ashley Walker",
-    "Anthony Hall",
-    "Stephanie Allen",
-    "Joshua Young",
-    "Nicole King",
-]
-cities = [
-    "New York",
-    "Los Angeles",
-    "Chicago",
-    "Houston",
-    "Miami",
-    "San Francisco",
-    "Boston",
-    "Seattle",
-    "London",
-    "Paris",
-    "Berlin",
-    "Madrid",
-    "Rome",
-    "Amsterdam",
-    "Brussels",
-    "Vienna",
-    "Tokyo",
-    "Osaka",
-    "Seoul",
-    "Beijing",
-    "Shanghai",
-    "Hong Kong",
-    "Singapore",
-    "Bangkok",
-    "Sydney",
-    "Melbourne",
-    "Toronto",
-    "Vancouver",
-    "Montreal",
-    "Calgary",
-    "Ottawa",
-    "Dubai",
-    "Abu Dhabi",
-    "Doha",
-    "Kuwait City",
-    "Riyadh",
-    "Tel Aviv",
-    "Istanbul",
-    "Cape Town",
-    "Johannesburg",
-    "Moscow",
-    "Saint Petersburg",
-    "Warsaw",
-    "Prague",
-    "Mexico City",
-    "São Paulo",
-    "Buenos Aires",
-    "Lima",
-    "Santiago",
-    "Bogotá",
-    "Delhi",
-    "Mumbai",
-    "Bangalore",
-    "Jakarta",
-    "Kuala Lumpur",
-    "Manila",
-    "Cairo",
-    "Atlanta",
-    "Phoenix",
-    "Dallas",
-    "Philadelphia",
-    "Washington DC",
-    "Las Vegas",
-    "Orlando",
-]
-states = [
-    "NY",
-    "CA",
-    "IL",
-    "TX",
-    "FL",
-    "WA",
-    "MA",
-    "GA",
-    "AZ",
-    "PA",
-    "NV",
-    "DC",
-    "CO",
-    "OR",
-    "NC",
-]
+# sample data generation using Faker
 property_types = [
     "Apartment",
     "Office",
@@ -416,18 +313,6 @@ property_types = [
     "Mixed Use",
     "Hotel",
     "Student Housing",
-]
-street_names = [
-    "Main St",
-    "Oak Ave",
-    "Pine Rd",
-    "Elm Dr",
-    "Maple Ln",
-    "Cedar Blvd",
-    "First St",
-    "Second Ave",
-    "Park Rd",
-    "Hill Dr",
 ]
 
 # property manager data
@@ -495,121 +380,26 @@ amenity_categories = [
     "Convenience",
 ]
 
-# increased tenant count
-tenant_first_names = [
-    "James",
-    "Mary",
-    "John",
-    "Patricia",
-    "Robert",
-    "Jennifer",
-    "Michael",
-    "Linda",
-    "William",
-    "Elizabeth",
-    "David",
-    "Barbara",
-    "Richard",
-    "Susan",
-    "Joseph",
-    "Jessica",
-    "Thomas",
-    "Sarah",
-    "Christopher",
-    "Karen",
-    "Charles",
-    "Nancy",
-    "Daniel",
-    "Lisa",
-    "Matthew",
-    "Betty",
-    "Anthony",
-    "Helen",
-    "Mark",
-    "Sandra",
-    "Donald",
-    "Donna",
-    "Steven",
-    "Carol",
-    "Paul",
-    "Ruth",
-    "Andrew",
-    "Sharon",
-    "Joshua",
-    "Michelle",
-    "Kenneth",
-    "Laura",
-    "Kevin",
-    "Sarah",
-    "Brian",
-    "Kimberly",
-    "George",
-    "Deborah",
-    "Timothy",
-    "Dorothy",
-]
-tenant_last_names = [
-    "Smith",
-    "Johnson",
-    "Williams",
-    "Brown",
-    "Jones",
-    "Garcia",
-    "Miller",
-    "Davis",
-    "Rodriguez",
-    "Martinez",
-    "Hernandez",
-    "Lopez",
-    "Gonzalez",
-    "Wilson",
-    "Anderson",
-    "Thomas",
-    "Taylor",
-    "Moore",
-    "Jackson",
-    "Martin",
-    "Lee",
-    "Perez",
-    "Thompson",
-    "White",
-    "Harris",
-    "Sanchez",
-    "Clark",
-    "Ramirez",
-    "Lewis",
-    "Robinson",
-    "Walker",
-    "Young",
-    "Allen",
-    "King",
-    "Wright",
-    "Scott",
-    "Torres",
-    "Nguyen",
-    "Hill",
-    "Flores",
-]
-
 # funds - increased from 10 to 25
-for i, name in enumerate(fund_names, 1):
-    inception = datetime(2010, 1, 1) + timedelta(days=random.randint(0, 4000))
-    manager = random.choice(manager_names)
+for i in range(1, 26):
+    name = fake.company() + " Real Estate Fund"
+    inception = fake.date_between(start_date="-15y", end_date="-1y")
+    manager = fake.name()
     assets = round(random.uniform(50_000_000, 2_000_000_000), 2)  # Increased range
     c.execute(
         "INSERT INTO Fund (id, name, inception_date, manager, total_assets) VALUES (?, ?, ?, ?, ?)",
-        (i, name, inception.date(), manager, assets),
+        (i, name, inception, manager, assets),
     )
 
 # properties - increased from 1000 to 5000
 for i in range(1, 5001):
-    address = f"{random.randint(100,9999)} {random.choice(street_names)}"
-    city = random.choice(cities)
-    state = random.choice(states)
-    zip_code = f"{random.randint(10000,99999)}"
+    address = fake.street_address()
+    city = fake.city()
+    state = fake.state_abbr()
+    zip_code = fake.zipcode()
     ptype = random.choice(property_types)
     value = round(random.uniform(100_000, 50_000_000), 2)  # Increased range
-    fund_id = random.randint(1, len(fund_names))
+    fund_id = random.randint(1, 25)  # 25 funds
     c.execute(
         "INSERT INTO Property (id, address, city, state, zip, type, value, fund_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         (i, address, city, state, zip_code, ptype, value, fund_id),
@@ -617,54 +407,35 @@ for i in range(1, 5001):
 
 # tenants - increased from 500 to 2000
 for i in range(1, 2001):
-    first_name = random.choice(tenant_first_names)
-    last_name = random.choice(tenant_last_names)
-    name = f"{first_name} {last_name}"
-    phone = f"({random.randint(100,999)})-{random.randint(100,999)}-{random.randint(1000,9999)}"
-    email = f"{first_name.lower()}.{last_name.lower()}@example.com"
+    name = fake.name()
+    phone = fake.phone_number()
+    email = fake.email()
     c.execute(
         "INSERT INTO Tenant (id, name, phone, email) VALUES (?, ?, ?, ?)",
         (i, name, phone, email),
     )
 
 # property managers
-property_manager_names = [
-    "Alice Cooper",
-    "Bob Thompson",
-    "Carol Davis",
-    "David Wilson",
-    "Eva Martinez",
-    "Frank Garcia",
-    "Grace Brown",
-    "Henry Lee",
-    "Ivy Johnson",
-    "Jack Smith",
-    "Kate Anderson",
-    "Leo Rodriguez",
-    "Maya Patel",
-    "Noah Williams",
-    "Olivia Jones",
-]
-
-for i, name in enumerate(property_manager_names, 1):
-    hire_date = datetime(2015, 1, 1) + timedelta(days=random.randint(0, 3000))
+for i in range(1, 16):  # 15 property managers
+    name = fake.name()
+    hire_date = fake.date_between(start_date="-8y", end_date="-1y")
     salary = round(random.uniform(45_000, 120_000), 2)
-    email = f"{name.lower().replace(' ', '.')}@company.com"
-    phone = f"({random.randint(100,999)})-{random.randint(100,999)}-{random.randint(1000,9999)}"
+    email = fake.email()
+    phone = fake.phone_number()
     is_active = random.choice([True, True, True, False])  # 75% active
     c.execute(
         "INSERT INTO PropertyManager (id, name, email, phone, hire_date, salary, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        (i, name, email, phone, hire_date.date(), salary, is_active),
+        (i, name, email, phone, hire_date, salary, is_active),
     )
 
 # property manager assignments
 assignment_id = 1
 for property_id in range(1, 5001):
-    manager_id = random.randint(1, len(property_manager_names))
-    start_date = datetime(2020, 1, 1) + timedelta(days=random.randint(0, 1500))
+    manager_id = random.randint(1, 15)  # 15 property managers
+    start_date = fake.date_between(start_date="-5y", end_date="-1m")
     end_date = None
     if random.random() < 0.2:  # 20% have ended assignments
-        end_date = start_date + timedelta(days=random.randint(180, 1000))
+        end_date = fake.date_between(start_date=start_date, end_date="today")
 
     c.execute(
         "INSERT INTO PropertyManagerAssignment (id, property_id, manager_id, start_date, end_date) VALUES (?, ?, ?, ?, ?)",
@@ -672,39 +443,20 @@ for property_id in range(1, 5001):
             assignment_id,
             property_id,
             manager_id,
-            start_date.date(),
-            end_date.date() if end_date else None,
+            start_date,
+            end_date,
         ),
     )
     assignment_id += 1
 
 # vendors
-vendor_names = [
-    "ABC Plumbing",
-    "Quick Fix Electric",
-    "Cool Air HVAC",
-    "Builder's Best",
-    "Clean Pro Services",
-    "Secure Guard Systems",
-    "Green Lawn Care",
-    "Legal Eagles",
-    "Safe Insurance Co",
-    "Fast Repair LLC",
-    "Elite Contractors",
-    "Perfect Paint Co",
-    "Floor Masters",
-    "Roof Experts",
-    "Tech Support Plus",
-]
-
-for i, name in enumerate(vendor_names, 1):
+for i in range(1, 16):  # 15 vendors
+    name = fake.company()
     category = random.choice(vendor_categories)
-    contact_person = (
-        f"{random.choice(tenant_first_names)} {random.choice(tenant_last_names)}"
-    )
-    phone = f"({random.randint(100,999)})-{random.randint(100,999)}-{random.randint(1000,9999)}"
-    email = f"contact@{name.lower().replace(' ', '').replace("'", '')}.com"
-    address = f"{random.randint(100,9999)} {random.choice(street_names)}, {random.choice(cities)}"
+    contact_person = fake.name()
+    phone = fake.phone_number()
+    email = fake.company_email()
+    address = fake.address()
     rating = round(random.uniform(2.5, 5.0), 1)
     is_active = random.choice([True, True, True, False])  # 75% active
 
@@ -741,13 +493,13 @@ for property_id in range(1, 5001):
     num_leases = random.randint(1, 4)  # Increased potential leases per property
     for _ in range(num_leases):
         tenant_id = random.randint(1, 2000)  # Updated range for increased tenants
-        start = datetime(2020, 1, 1) + timedelta(days=random.randint(0, 1800))
-        end = start + timedelta(days=random.randint(180, 720))
+        start = fake.date_between(start_date="-5y", end_date="today")
+        end = fake.date_between(start_date=start, end_date="+2y")
         rent = round(random.uniform(1000, 25000), 2)  # Increased range
         deposit = round(rent * random.uniform(0.5, 2), 2)
         c.execute(
             "INSERT INTO Lease (id, property_id, tenant_id, start_date, end_date, rent, deposit) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (lease_id, property_id, tenant_id, start.date(), end.date(), rent, deposit),
+            (lease_id, property_id, tenant_id, start, end, rent, deposit),
         )
         lease_id += 1
 
@@ -756,23 +508,33 @@ print("Creating payments data...")
 payment_id = 1
 for lease in c.execute("SELECT id, start_date, end_date, rent FROM Lease"):
     lease_id, start_date, end_date, rent = lease
-    start = datetime.strptime(start_date, "%Y-%m-%d")
-    end = datetime.strptime(end_date, "%Y-%m-%d")
-    months = (end.year - start.year) * 12 + (end.month - start.month)
-    for m in range(months):
-        pay_date = start + timedelta(days=30 * m)
+    start = datetime.strptime(start_date, "%Y-%m-%d").date()
+    end = datetime.strptime(end_date, "%Y-%m-%d").date()
+    
+    # Calculate number of months in the lease
+    current_date = start
+    while current_date <= end:
         # Add some variability - some late payments, some early
+        pay_date = current_date
         if random.random() < 0.05:  # 5% late payments
-            pay_date += timedelta(days=random.randint(1, 15))
+            pay_date = current_date + timedelta(days=random.randint(1, 15))
+        
         amount = rent
         # Sometimes partial payments
         if random.random() < 0.02:  # 2% partial payments
             amount = round(rent * random.uniform(0.3, 0.9), 2)
+        
         c.execute(
             "INSERT INTO Payment (id, lease_id, payment_date, amount) VALUES (?, ?, ?, ?)",
-            (payment_id, lease_id, pay_date.date(), amount),
+            (payment_id, lease_id, pay_date, amount),
         )
         payment_id += 1
+        
+        # Move to next month
+        if current_date.month == 12:
+            current_date = current_date.replace(year=current_date.year + 1, month=1)
+        else:
+            current_date = current_date.replace(month=current_date.month + 1)
 
 # maintenance requests
 print("Creating maintenance requests...")
@@ -783,31 +545,24 @@ for _ in range(8000):  # Generate 8000 maintenance requests
         random.randint(1, 2000) if random.random() < 0.7 else None
     )  # 70% from tenants
     vendor_id = (
-        random.randint(1, len(vendor_names)) if random.random() < 0.6 else None
+        random.randint(1, 15) if random.random() < 0.6 else None
     )  # 60% assigned vendor
-    manager_id = random.randint(1, len(property_manager_names))
+    manager_id = random.randint(1, 15)  # 15 property managers
     category = random.choice(maintenance_categories)
     priority = random.choice(maintenance_priorities)
     status = random.choice(maintenance_statuses)
 
-    created_date = datetime(2020, 1, 1) + timedelta(days=random.randint(0, 1800))
+    created_date = fake.date_between(start_date="-5y", end_date="today")
     completed_date = None
     if status == "Completed":
-        completed_date = created_date + timedelta(days=random.randint(1, 30))
+        completed_date = fake.date_between(start_date=created_date, end_date="today")
 
     estimated_cost = round(random.uniform(50, 5000), 2)
     actual_cost = None
     if status == "Completed":
         actual_cost = round(estimated_cost * random.uniform(0.8, 1.3), 2)
 
-    descriptions = [
-        f"{category} issue in unit",
-        f"Repair needed for {category.lower()}",
-        f"Maintenance required - {category.lower()}",
-        f"Emergency {category.lower()} problem",
-        f"Routine {category.lower()} service",
-    ]
-    description = random.choice(descriptions)
+    description = fake.sentence(nb_words=6)
 
     c.execute(
         """INSERT INTO MaintenanceRequest 
@@ -824,8 +579,8 @@ for _ in range(8000):  # Generate 8000 maintenance requests
             description,
             priority,
             status,
-            created_date.date(),
-            completed_date.date() if completed_date else None,
+            created_date,
+            completed_date,
             estimated_cost,
             actual_cost,
         ),
@@ -837,21 +592,14 @@ print("Creating expenses...")
 expense_id = 1
 for _ in range(15000):  # Generate 15000 expenses
     property_id = random.randint(1, 5000)
-    vendor_id = random.randint(1, len(vendor_names)) if random.random() < 0.8 else None
+    vendor_id = random.randint(1, 15) if random.random() < 0.8 else None
     category = random.choice(expense_categories)
     amount = round(random.uniform(25, 10000), 2)
-    expense_date = datetime(2020, 1, 1) + timedelta(days=random.randint(0, 1800))
-    invoice_number = f"INV-{random.randint(100000, 999999)}"
+    expense_date = fake.date_between(start_date="-5y", end_date="today")
+    invoice_number = fake.bothify(text="INV-######")
     is_recurring = random.choice([True, False])
 
-    descriptions = [
-        f"{category} expense",
-        f"Monthly {category.lower()}",
-        f"Annual {category.lower()}",
-        f"Emergency {category.lower()}",
-        f"Routine {category.lower()}",
-    ]
-    description = random.choice(descriptions)
+    description = fake.sentence(nb_words=4)
 
     c.execute(
         """INSERT INTO Expense 
@@ -864,7 +612,7 @@ for _ in range(15000):  # Generate 15000 expenses
             category,
             description,
             amount,
-            expense_date.date(),
+            expense_date,
             invoice_number,
             is_recurring,
         ),
@@ -878,14 +626,12 @@ for property_id in range(1, 5001):
     num_docs = random.randint(2, 8)  # 2-8 documents per property
     for _ in range(num_docs):
         doc_type = random.choice(document_types)
-        doc_name = f"{doc_type.replace(' ', '_')}_{property_id}_{random.randint(1000, 9999)}.pdf"
+        doc_name = f"{doc_type.replace(' ', '_')}_{property_id}_{fake.random_int(min=1000, max=9999)}.pdf"
         file_path = f"/documents/property_{property_id}/{doc_name}"
-        upload_date = datetime(2020, 1, 1) + timedelta(days=random.randint(0, 1800))
+        upload_date = fake.date_between(start_date="-5y", end_date="today")
         expiry_date = None
         if doc_type in ["Insurance Policy", "Permit", "Lease Agreement"]:
-            expiry_date = upload_date + timedelta(
-                days=random.randint(365, 1095)
-            )  # 1-3 years
+            expiry_date = fake.date_between(start_date=upload_date, end_date="+3y")
 
         c.execute(
             """INSERT INTO PropertyDocument 
@@ -897,8 +643,8 @@ for property_id in range(1, 5001):
                 doc_type,
                 doc_name,
                 file_path,
-                upload_date.date(),
-                expiry_date.date() if expiry_date else None,
+                upload_date,
+                expiry_date,
             ),
         )
         doc_id += 1
@@ -908,14 +654,12 @@ print("Creating inspections...")
 inspection_id = 1
 for _ in range(6000):  # Generate 6000 inspections
     property_id = random.randint(1, 5000)
-    inspector_name = (
-        f"{random.choice(tenant_first_names)} {random.choice(tenant_last_names)}"
-    )
+    inspector_name = fake.name()
     inspection_type = random.choice(inspection_types)
-    inspection_date = datetime(2020, 1, 1) + timedelta(days=random.randint(0, 1800))
+    inspection_date = fake.date_between(start_date="-5y", end_date="today")
     overall_rating = random.choice(inspection_ratings)
-    notes = f"{inspection_type} inspection completed. Overall condition: {overall_rating.lower()}."
-    next_inspection_date = inspection_date + timedelta(days=random.randint(180, 365))
+    notes = fake.text(max_nb_chars=200)
+    next_inspection_date = fake.date_between(start_date=inspection_date, end_date="+1y")
 
     c.execute(
         """INSERT INTO Inspection 
@@ -926,10 +670,10 @@ for _ in range(6000):  # Generate 6000 inspections
             property_id,
             inspector_name,
             inspection_type,
-            inspection_date.date(),
+            inspection_date,
             overall_rating,
             notes,
-            next_inspection_date.date(),
+            next_inspection_date,
         ),
     )
     inspection_id += 1
@@ -975,14 +719,12 @@ for property_id in range(1, 5001):
 print("Creating tenant history...")
 for tenant_id in range(1, 2001):
     if random.random() < 0.8:  # 80% of tenants have history
-        previous_address = f"{random.randint(100,9999)} {random.choice(street_names)}, {random.choice(cities)}"
+        previous_address = fake.address()
         employment_status = random.choice(employment_statuses)
         annual_income = round(random.uniform(25000, 150000), 2)
         credit_score = random.randint(300, 850)
-        references = f"{random.choice(tenant_first_names)} {random.choice(tenant_last_names)}, {random.choice(tenant_first_names)} {random.choice(tenant_last_names)}"
-        background_check_date = datetime(2020, 1, 1) + timedelta(
-            days=random.randint(0, 1800)
-        )
+        references = f"{fake.name()}, {fake.name()}"
+        background_check_date = fake.date_between(start_date="-5y", end_date="today")
 
         c.execute(
             """INSERT INTO TenantHistory 
@@ -995,18 +737,19 @@ for tenant_id in range(1, 2001):
                 annual_income,
                 credit_score,
                 references,
-                background_check_date.date(),
+                background_check_date,
             ),
         )
 
 # market data
 print("Creating market data...")
 market_id = 1
-for city in cities[:20]:  # Use first 20 cities
-    state = random.choice(states)
+cities_sample = [fake.city() for _ in range(20)]  # Generate 20 cities
+for city in cities_sample:
+    state = fake.state_abbr()
     for prop_type in property_types:
         for month in range(0, 60, 3):  # 5 years, quarterly data
-            date = datetime(2020, 1, 1) + timedelta(days=month * 30)
+            date = fake.date_between(start_date="-5y", end_date="today")
             avg_price_per_sqft = round(random.uniform(50, 800), 2)
             vacancy_rate = round(random.uniform(0.02, 0.15), 3)
             rental_yield = round(random.uniform(0.03, 0.12), 3)
@@ -1021,7 +764,7 @@ for city in cities[:20]:  # Use first 20 cities
                     city,
                     state,
                     prop_type,
-                    date.date(),
+                    date,
                     avg_price_per_sqft,
                     vacancy_rate,
                     rental_yield,
@@ -1053,15 +796,15 @@ for property_id in range(1, 5001):
 # fund performance - expanded
 print("Creating fund performance data...")
 performance_id = 1
-for fund_id in range(1, len(fund_names) + 1):
+for fund_id in range(1, 26):  # 25 funds
     for d in range(0, 2190, 7):  # 6 years, weekly data
-        date = datetime(2019, 1, 1) + timedelta(days=d)
+        date = fake.date_between(start_date="-6y", end_date="today")
         # More realistic NAV progression with some volatility
         base_nav = random.uniform(50_000_000, 2_000_000_000)
         nav = round(base_nav * (1 + random.uniform(-0.1, 0.1)), 2)
         c.execute(
             "INSERT INTO FundPerformance (id, fund_id, date, nav) VALUES (?, ?, ?, ?)",
-            (performance_id, fund_id, date.date(), nav),
+            (performance_id, fund_id, date, nav),
         )
         performance_id += 1
 
@@ -1073,13 +816,11 @@ for lease in c.execute(
 ):
     lease_id, current_rent, end_date = lease
     if random.random() < 0.6:  # 60% of expired leases get renewed
-        renewal_date = datetime.strptime(end_date, "%Y-%m-%d") + timedelta(
-            days=random.randint(-30, 30)
-        )
+        # Convert string date to date object
+        end_date_obj = datetime.strptime(end_date, "%Y-%m-%d").date()
+        renewal_date = fake.date_between(start_date=end_date_obj, end_date="today")
         new_rent = round(current_rent * random.uniform(1.0, 1.15), 2)  # 0-15% increase
-        new_end_date = renewal_date + timedelta(
-            days=random.randint(365, 730)
-        )  # 1-2 years
+        new_end_date = fake.date_between(start_date=renewal_date, end_date="+2y")
         renewal_terms = random.choice(
             [
                 "Standard renewal",
@@ -1096,9 +837,9 @@ for lease in c.execute(
             (
                 renewal_id,
                 lease_id,
-                renewal_date.date(),
+                renewal_date,
                 new_rent,
-                new_end_date.date(),
+                new_end_date,
                 renewal_terms,
             ),
         )
@@ -1112,17 +853,10 @@ for property_id in range(1, 5001):
     insurance_types = ["Property", "Liability", "Flood", "Earthquake", "Umbrella"]
     for _ in range(num_policies):
         insurance_type = random.choice(insurance_types)
-        providers = [
-            "SafeGuard Insurance",
-            "Reliable Coverage",
-            "Premium Protect",
-            "SecureShield",
-            "TrustCorp Insurance",
-        ]
-        provider = random.choice(providers)
-        policy_number = f"POL-{random.randint(1000000, 9999999)}"
-        start_date = datetime(2020, 1, 1) + timedelta(days=random.randint(0, 1095))
-        end_date = start_date + timedelta(days=365)  # 1 year policies
+        provider = fake.company()
+        policy_number = fake.bothify(text="POL-#######")
+        start_date = fake.date_between(start_date="-3y", end_date="today")
+        end_date = fake.date_between(start_date=start_date, end_date="+1y")
         premium_amount = round(random.uniform(500, 15000), 2)
         coverage_amount = round(random.uniform(100000, 10000000), 2)
 
@@ -1136,8 +870,8 @@ for property_id in range(1, 5001):
                 insurance_type,
                 provider,
                 policy_number,
-                start_date.date(),
-                end_date.date(),
+                start_date,
+                end_date,
                 premium_amount,
                 coverage_amount,
             ),
