@@ -1,32 +1,15 @@
 # Real Estate Sample Database
 
-This project demonstrates a simple SQLite database for managing real estate data. It includes Python scripts to create the database and query it.
+SQLite database with sample real estate data and management tools.
 
 ## Files
 
-- `createdb.py`: Script to create and populate the SQLite database.
-- `query.py`: Script to query the database for specific information.
-- `real_estate.db`: The SQLite database file.
-
-## Usage
-
-1. Run `createdb.py` to create and populate the database.
-2. Run `query.py` to execute predefined queries and fetch results.
+- `src/create_db.py` - Creates and populates the database with sample data
+- `src/run_query.py` - Example query to find top tenant by rent paid
+- `src/generate_schema.py` - Generates visual database schema diagrams
+- `database/real_estate.db` - SQLite database file
 
 ## Requirements
 
 - Python 3.x
-- SQLite
-
-## Example Query
-
-The `query.py` script fetches the tenant who has paid the highest total rent:
-
-```sql
-SELECT t.name, t.phone, t.email, SUM(l.rent) AS total_rent_paid 
-FROM Tenant t 
-JOIN Lease l ON t.id = l.tenant_id 
-GROUP BY t.name 
-ORDER BY total_rent_paid DESC 
-LIMIT 1;
-```
+- Dependencies: `pip install -r requirements.txt`
