@@ -1,7 +1,9 @@
 import sqlite3
 
 # define the SQL query statement
-QUERY_STATEMENT = "SELECT * FROM Tenant LIMIT 10;"
+QUERY_STATEMENT = """
+SELECT AVG(julianday(end_date) - julianday(start_date)) AS average_lease_term FROM Lease;
+"""
 
 # connect to the database
 connection = sqlite3.connect("database/real_estate.db")

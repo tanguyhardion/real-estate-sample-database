@@ -1,6 +1,6 @@
 """
-Schema visualization generator for the Real Estate Database
-Uses ERAlchemy to generate visual database schema diagrams
+diagram visualization generator for the Real Estate Database
+Uses ERAlchemy to generate visual database diagram diagrams
 """
 
 import os
@@ -24,17 +24,17 @@ except ImportError:
         sys.exit(1)
 
 
-def generate_schema_diagram():
+def generate_diagram():
     """Generate ER diagram from the SQLite database"""
 
     # database file path
     db_path = "database/real_estate.db"
 
-    # create schemas directory
-    schema_dir = "schemas"
-    if not os.path.exists(schema_dir):
-        os.makedirs(schema_dir)
-        print(f"Created directory: {schema_dir}")
+    # create diagrams directory
+    diagram_dir = "diagrams"
+    if not os.path.exists(diagram_dir):
+        os.makedirs(diagram_dir)
+        print(f"Created directory: {diagram_dir}")
 
     # check if database exists
     if not os.path.exists(db_path):
@@ -42,33 +42,43 @@ def generate_schema_diagram():
         print("Please run 'python src/createdb.py' first to create the database.")
         return
 
-    print("Generating database schema diagram...")
+    print("Generating database diagram diagram...")
 
-    # generate basic schema files
+    # generate basic diagram files
     try:
         # generate DOT file
         print("Creating DOT file...")
-        basic_dot = os.path.join(schema_dir, "real_estate_schema.dot")
-        render_er(f"sqlite:///{db_path}", basic_dot)
-        print(f"✓ Successfully created {basic_dot}")
+        diagram_dot = os.path.join(diagram_dir, "real_estate_diagram.dot")
+        render_er(f"sqlite:///{db_path}", diagram_dot)
+        print(f"✓ Successfully created {diagram_dot}")
 
         # generate PNG file
         print("Creating PNG file...")
-        basic_png = os.path.join(schema_dir, "real_estate_schema.png")
-        render_er(f"sqlite:///{db_path}", basic_png)
-        print(f"✓ Successfully created {basic_png}")
+        diagram_png = os.path.join(diagram_dir, "real_estate_diagram.png")
+        render_er(f"sqlite:///{db_path}", diagram_png)
+        print(f"✓ Successfully created {diagram_png}")
+
+        # generate Mermaid file
+        print("Creating Mermaid file...")
+        diagram_mermaid = os.path.join(diagram_dir, "real_estate_diagram.mermaid")
+        render_er(f"sqlite:///{db_path}", diagram_mermaid, mode="mermaid")
+        print(f"✓ Successfully created {diagram_mermaid}")
 
     except Exception as e:
-        print(f"✗ Failed to create schema files: {str(e)}")
+        print(f"✗ Failed to create diagram files: {str(e)}")
 
-    print("\nSchema generation complete!")
-    print(f"\nGenerated files in {schema_dir}/ directory:")
+    print("\ndiagram generation complete!")
+    print(f"\nGenerated files in {diagram_dir}/ directory:")
 
     # list generated files
-    generated_files = ["real_estate_schema.dot", "real_estate_schema.png"]
+    generated_files = [
+        "real_estate_diagram.dot",
+        "real_estate_diagram.png",
+        "real_estate_diagram.pdf",
+    ]
 
     for file_name in generated_files:
-        full_path = os.path.join(schema_dir, file_name)
+        full_path = os.path.join(diagram_dir, file_name)
         if os.path.exists(full_path):
             size = os.path.getsize(full_path)
             print(f"  - {file_name} ({size:,} bytes)")
@@ -111,7 +121,7 @@ def print_table_info():
             print(f"  Rows: {row_count:,}")
 
             # print column details
-            print("  Schema:")
+            print("  diagram:")
             for col in columns:
                 col_id, name, data_type, not_null, default_val, primary_key = col
                 pk_marker = " (PK)" if primary_key else ""
@@ -125,10 +135,10 @@ def print_table_info():
 
 
 def main():
-    """Main function to generate schema and print database info"""
+    """Main function to generate diagram and print database info"""
 
     print("=" * 70)
-    print("Real Estate Database Schema Generator")
+    print("Real Estate Database diagram Generator")
     print("=" * 70)
 
     # print database information
@@ -136,19 +146,19 @@ def main():
 
     print("\n" + "=" * 70)
 
-    # generate schema diagrams
-    generate_schema_diagram()
+    # generate diagram diagrams
+    generate_diagram()
 
     print("\n" + "=" * 70)
-    print("Schema generation process completed!")
+    print("diagram generation process completed!")
 
     # additional instructions
-    print("\nTo view the schema diagram:")
-    print("1. Open 'schemas/real_estate_schema.png' to view the database schema")
+    print("\nTo view the diagram diagram:")
+    print("1. Open 'diagrams/real_estate_diagram.png' to view the database diagram")
     print(
-        "2. Use 'schemas/real_estate_schema.dot' with Graphviz tools for customization"
+        "2. Use 'diagrams/real_estate_diagram.dot' with Graphviz tools for customization"
     )
-    print(f"\nAll schema files are organized in the 'schemas/' directory.")
+    print(f"\nAll diagram files are organized in the 'diagrams/' directory.")
 
 
 if __name__ == "__main__":

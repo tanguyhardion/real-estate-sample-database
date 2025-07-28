@@ -1,0 +1,205 @@
+<!--
+
+classDiagram
+class Amenity{
+ *INTEGER id
+   TEXT category
+   TEXT description
+   TEXT name NOT NULL
+}
+class Expense{
+ *INTEGER id
+   REAL amount
+   TEXT category
+   TEXT description
+   DATE expense_date
+   TEXT invoice_number
+   BOOLEAN is_recurring
+   INTEGER property_id
+   INTEGER vendor_id
+}
+class Property{
+ *INTEGER id
+   TEXT address NOT NULL
+   TEXT city
+   INTEGER fund_id
+   TEXT state
+   TEXT type
+   REAL value
+   TEXT zip
+}
+class Fund{
+ *INTEGER id
+   DATE inception_date
+   TEXT manager
+   TEXT name NOT NULL
+   REAL total_assets
+}
+class Vendor{
+ *INTEGER id
+   TEXT address
+   TEXT category
+   TEXT contact_person
+   TEXT email
+   BOOLEAN is_active
+   TEXT name NOT NULL
+   TEXT phone
+   REAL rating
+}
+class FundPerformance{
+ *INTEGER id
+   DATE date
+   INTEGER fund_id
+   REAL nav
+}
+class Inspection{
+ *INTEGER id
+   DATE inspection_date
+   TEXT inspection_type
+   TEXT inspector_name
+   DATE next_inspection_date
+   TEXT notes
+   TEXT overall_rating
+   INTEGER property_id
+}
+class Insurance{
+ *INTEGER id
+   REAL coverage_amount
+   DATE end_date
+   TEXT insurance_type
+   TEXT policy_number
+   REAL premium_amount
+   INTEGER property_id
+   TEXT provider
+   DATE start_date
+}
+class Lease{
+ *INTEGER id
+   REAL deposit
+   DATE end_date
+   INTEGER property_id
+   REAL rent
+   DATE start_date
+   INTEGER tenant_id
+}
+class Tenant{
+ *INTEGER id
+   TEXT email
+   TEXT name NOT NULL
+   TEXT phone
+}
+class LeaseRenewal{
+ *INTEGER id
+   INTEGER lease_id
+   DATE new_end_date
+   REAL new_rent
+   DATE renewal_date
+   TEXT renewal_terms
+}
+class MaintenanceRequest{
+ *INTEGER id
+   REAL actual_cost
+   TEXT category
+   DATE completed_date
+   DATE created_date
+   TEXT description
+   REAL estimated_cost
+   INTEGER manager_id
+   TEXT priority
+   INTEGER property_id
+   TEXT status
+   INTEGER tenant_id
+   INTEGER vendor_id
+}
+class PropertyManager{
+ *INTEGER id
+   TEXT email
+   DATE hire_date
+   BOOLEAN is_active
+   TEXT name NOT NULL
+   TEXT phone
+   REAL salary
+}
+class MarketData{
+ *INTEGER id
+   REAL appreciation_rate
+   REAL avg_price_per_sqft
+   TEXT city
+   DATE date
+   TEXT property_type
+   REAL rental_yield
+   TEXT state
+   REAL vacancy_rate
+}
+class Payment{
+ *INTEGER id
+   REAL amount
+   INTEGER lease_id
+   DATE payment_date
+}
+class PropertyAmenity{
+ *INTEGER id
+   REAL additional_cost
+   INTEGER amenity_id
+   BOOLEAN is_available
+   INTEGER property_id
+}
+class PropertyDocument{
+ *INTEGER id
+   TEXT document_name
+   TEXT document_type
+   DATE expiry_date
+   TEXT file_path
+   INTEGER property_id
+   DATE upload_date
+}
+class PropertyManagerAssignment{
+ *INTEGER id
+   DATE end_date
+   INTEGER manager_id
+   INTEGER property_id
+   DATE start_date
+}
+class TenantHistory{
+ *INTEGER id
+   REAL annual_income
+   DATE background_check_date
+   INTEGER credit_score
+   TEXT employment_status
+   TEXT previous_address
+   TEXT reference_contacts
+   INTEGER tenant_id
+}
+class Utility{
+ *INTEGER id
+   TEXT account_number
+   BOOLEAN is_tenant_responsibility
+   REAL monthly_average
+   INTEGER property_id
+   TEXT provider
+   TEXT utility_type
+}
+Property "0..1" -- "0..n" Expense
+Vendor "0..1" -- "0..n" Expense
+Fund "0..1" -- "0..n" Property
+Fund "0..1" -- "0..n" FundPerformance
+Property "0..1" -- "0..n" Inspection
+Property "0..1" -- "0..n" Insurance
+Tenant "0..1" -- "0..n" Lease
+Property "0..1" -- "0..n" Lease
+Lease "0..1" -- "0..n" LeaseRenewal
+Vendor "0..1" -- "0..n" MaintenanceRequest
+PropertyManager "0..1" -- "0..n" MaintenanceRequest
+Tenant "0..1" -- "0..n" MaintenanceRequest
+Property "0..1" -- "0..n" MaintenanceRequest
+Lease "0..1" -- "0..n" Payment
+Amenity "0..1" -- "0..n" PropertyAmenity
+Property "0..1" -- "0..n" PropertyAmenity
+Property "0..1" -- "0..n" PropertyDocument
+PropertyManager "0..1" -- "0..n" PropertyManagerAssignment
+Property "0..1" -- "0..n" PropertyManagerAssignment
+Tenant "0..1" -- "0..n" TenantHistory
+Property "0..1" -- "0..n" Utility
+
+-->
+![](https://mermaid.ink/img/Y2xhc3NEaWFncmFtCmNsYXNzIEFtZW5pdHl7CiAqSU5URUdFUiBpZAogICBURVhUIGNhdGVnb3J5CiAgIFRFWFQgZGVzY3JpcHRpb24KICAgVEVYVCBuYW1lIE5PVCBOVUxMCn0KY2xhc3MgRXhwZW5zZXsKICpJTlRFR0VSIGlkCiAgIFJFQUwgYW1vdW50CiAgIFRFWFQgY2F0ZWdvcnkKICAgVEVYVCBkZXNjcmlwdGlvbgogICBEQVRFIGV4cGVuc2VfZGF0ZQogICBURVhUIGludm9pY2VfbnVtYmVyCiAgIEJPT0xFQU4gaXNfcmVjdXJyaW5nCiAgIElOVEVHRVIgcHJvcGVydHlfaWQKICAgSU5URUdFUiB2ZW5kb3JfaWQKfQpjbGFzcyBQcm9wZXJ0eXsKICpJTlRFR0VSIGlkCiAgIFRFWFQgYWRkcmVzcyBOT1QgTlVMTAogICBURVhUIGNpdHkKICAgSU5URUdFUiBmdW5kX2lkCiAgIFRFWFQgc3RhdGUKICAgVEVYVCB0eXBlCiAgIFJFQUwgdmFsdWUKICAgVEVYVCB6aXAKfQpjbGFzcyBGdW5kewogKklOVEVHRVIgaWQKICAgREFURSBpbmNlcHRpb25fZGF0ZQogICBURVhUIG1hbmFnZXIKICAgVEVYVCBuYW1lIE5PVCBOVUxMCiAgIFJFQUwgdG90YWxfYXNzZXRzCn0KY2xhc3MgVmVuZG9yewogKklOVEVHRVIgaWQKICAgVEVYVCBhZGRyZXNzCiAgIFRFWFQgY2F0ZWdvcnkKICAgVEVYVCBjb250YWN0X3BlcnNvbgogICBURVhUIGVtYWlsCiAgIEJPT0xFQU4gaXNfYWN0aXZlCiAgIFRFWFQgbmFtZSBOT1QgTlVMTAogICBURVhUIHBob25lCiAgIFJFQUwgcmF0aW5nCn0KY2xhc3MgRnVuZFBlcmZvcm1hbmNlewogKklOVEVHRVIgaWQKICAgREFURSBkYXRlCiAgIElOVEVHRVIgZnVuZF9pZAogICBSRUFMIG5hdgp9CmNsYXNzIEluc3BlY3Rpb257CiAqSU5URUdFUiBpZAogICBEQVRFIGluc3BlY3Rpb25fZGF0ZQogICBURVhUIGluc3BlY3Rpb25fdHlwZQogICBURVhUIGluc3BlY3Rvcl9uYW1lCiAgIERBVEUgbmV4dF9pbnNwZWN0aW9uX2RhdGUKICAgVEVYVCBub3RlcwogICBURVhUIG92ZXJhbGxfcmF0aW5nCiAgIElOVEVHRVIgcHJvcGVydHlfaWQKfQpjbGFzcyBJbnN1cmFuY2V7CiAqSU5URUdFUiBpZAogICBSRUFMIGNvdmVyYWdlX2Ftb3VudAogICBEQVRFIGVuZF9kYXRlCiAgIFRFWFQgaW5zdXJhbmNlX3R5cGUKICAgVEVYVCBwb2xpY3lfbnVtYmVyCiAgIFJFQUwgcHJlbWl1bV9hbW91bnQKICAgSU5URUdFUiBwcm9wZXJ0eV9pZAogICBURVhUIHByb3ZpZGVyCiAgIERBVEUgc3RhcnRfZGF0ZQp9CmNsYXNzIExlYXNlewogKklOVEVHRVIgaWQKICAgUkVBTCBkZXBvc2l0CiAgIERBVEUgZW5kX2RhdGUKICAgSU5URUdFUiBwcm9wZXJ0eV9pZAogICBSRUFMIHJlbnQKICAgREFURSBzdGFydF9kYXRlCiAgIElOVEVHRVIgdGVuYW50X2lkCn0KY2xhc3MgVGVuYW50ewogKklOVEVHRVIgaWQKICAgVEVYVCBlbWFpbAogICBURVhUIG5hbWUgTk9UIE5VTEwKICAgVEVYVCBwaG9uZQp9CmNsYXNzIExlYXNlUmVuZXdhbHsKICpJTlRFR0VSIGlkCiAgIElOVEVHRVIgbGVhc2VfaWQKICAgREFURSBuZXdfZW5kX2RhdGUKICAgUkVBTCBuZXdfcmVudAogICBEQVRFIHJlbmV3YWxfZGF0ZQogICBURVhUIHJlbmV3YWxfdGVybXMKfQpjbGFzcyBNYWludGVuYW5jZVJlcXVlc3R7CiAqSU5URUdFUiBpZAogICBSRUFMIGFjdHVhbF9jb3N0CiAgIFRFWFQgY2F0ZWdvcnkKICAgREFURSBjb21wbGV0ZWRfZGF0ZQogICBEQVRFIGNyZWF0ZWRfZGF0ZQogICBURVhUIGRlc2NyaXB0aW9uCiAgIFJFQUwgZXN0aW1hdGVkX2Nvc3QKICAgSU5URUdFUiBtYW5hZ2VyX2lkCiAgIFRFWFQgcHJpb3JpdHkKICAgSU5URUdFUiBwcm9wZXJ0eV9pZAogICBURVhUIHN0YXR1cwogICBJTlRFR0VSIHRlbmFudF9pZAogICBJTlRFR0VSIHZlbmRvcl9pZAp9CmNsYXNzIFByb3BlcnR5TWFuYWdlcnsKICpJTlRFR0VSIGlkCiAgIFRFWFQgZW1haWwKICAgREFURSBoaXJlX2RhdGUKICAgQk9PTEVBTiBpc19hY3RpdmUKICAgVEVYVCBuYW1lIE5PVCBOVUxMCiAgIFRFWFQgcGhvbmUKICAgUkVBTCBzYWxhcnkKfQpjbGFzcyBNYXJrZXREYXRhewogKklOVEVHRVIgaWQKICAgUkVBTCBhcHByZWNpYXRpb25fcmF0ZQogICBSRUFMIGF2Z19wcmljZV9wZXJfc3FmdAogICBURVhUIGNpdHkKICAgREFURSBkYXRlCiAgIFRFWFQgcHJvcGVydHlfdHlwZQogICBSRUFMIHJlbnRhbF95aWVsZAogICBURVhUIHN0YXRlCiAgIFJFQUwgdmFjYW5jeV9yYXRlCn0KY2xhc3MgUGF5bWVudHsKICpJTlRFR0VSIGlkCiAgIFJFQUwgYW1vdW50CiAgIElOVEVHRVIgbGVhc2VfaWQKICAgREFURSBwYXltZW50X2RhdGUKfQpjbGFzcyBQcm9wZXJ0eUFtZW5pdHl7CiAqSU5URUdFUiBpZAogICBSRUFMIGFkZGl0aW9uYWxfY29zdAogICBJTlRFR0VSIGFtZW5pdHlfaWQKICAgQk9PTEVBTiBpc19hdmFpbGFibGUKICAgSU5URUdFUiBwcm9wZXJ0eV9pZAp9CmNsYXNzIFByb3BlcnR5RG9jdW1lbnR7CiAqSU5URUdFUiBpZAogICBURVhUIGRvY3VtZW50X25hbWUKICAgVEVYVCBkb2N1bWVudF90eXBlCiAgIERBVEUgZXhwaXJ5X2RhdGUKICAgVEVYVCBmaWxlX3BhdGgKICAgSU5URUdFUiBwcm9wZXJ0eV9pZAogICBEQVRFIHVwbG9hZF9kYXRlCn0KY2xhc3MgUHJvcGVydHlNYW5hZ2VyQXNzaWdubWVudHsKICpJTlRFR0VSIGlkCiAgIERBVEUgZW5kX2RhdGUKICAgSU5URUdFUiBtYW5hZ2VyX2lkCiAgIElOVEVHRVIgcHJvcGVydHlfaWQKICAgREFURSBzdGFydF9kYXRlCn0KY2xhc3MgVGVuYW50SGlzdG9yeXsKICpJTlRFR0VSIGlkCiAgIFJFQUwgYW5udWFsX2luY29tZQogICBEQVRFIGJhY2tncm91bmRfY2hlY2tfZGF0ZQogICBJTlRFR0VSIGNyZWRpdF9zY29yZQogICBURVhUIGVtcGxveW1lbnRfc3RhdHVzCiAgIFRFWFQgcHJldmlvdXNfYWRkcmVzcwogICBURVhUIHJlZmVyZW5jZV9jb250YWN0cwogICBJTlRFR0VSIHRlbmFudF9pZAp9CmNsYXNzIFV0aWxpdHl7CiAqSU5URUdFUiBpZAogICBURVhUIGFjY291bnRfbnVtYmVyCiAgIEJPT0xFQU4gaXNfdGVuYW50X3Jlc3BvbnNpYmlsaXR5CiAgIFJFQUwgbW9udGhseV9hdmVyYWdlCiAgIElOVEVHRVIgcHJvcGVydHlfaWQKICAgVEVYVCBwcm92aWRlcgogICBURVhUIHV0aWxpdHlfdHlwZQp9ClByb3BlcnR5ICIwLi4xIiAtLSAiMC4ubiIgRXhwZW5zZQpWZW5kb3IgIjAuLjEiIC0tICIwLi5uIiBFeHBlbnNlCkZ1bmQgIjAuLjEiIC0tICIwLi5uIiBQcm9wZXJ0eQpGdW5kICIwLi4xIiAtLSAiMC4ubiIgRnVuZFBlcmZvcm1hbmNlClByb3BlcnR5ICIwLi4xIiAtLSAiMC4ubiIgSW5zcGVjdGlvbgpQcm9wZXJ0eSAiMC4uMSIgLS0gIjAuLm4iIEluc3VyYW5jZQpUZW5hbnQgIjAuLjEiIC0tICIwLi5uIiBMZWFzZQpQcm9wZXJ0eSAiMC4uMSIgLS0gIjAuLm4iIExlYXNlCkxlYXNlICIwLi4xIiAtLSAiMC4ubiIgTGVhc2VSZW5ld2FsClZlbmRvciAiMC4uMSIgLS0gIjAuLm4iIE1haW50ZW5hbmNlUmVxdWVzdApQcm9wZXJ0eU1hbmFnZXIgIjAuLjEiIC0tICIwLi5uIiBNYWludGVuYW5jZVJlcXVlc3QKVGVuYW50ICIwLi4xIiAtLSAiMC4ubiIgTWFpbnRlbmFuY2VSZXF1ZXN0ClByb3BlcnR5ICIwLi4xIiAtLSAiMC4ubiIgTWFpbnRlbmFuY2VSZXF1ZXN0CkxlYXNlICIwLi4xIiAtLSAiMC4ubiIgUGF5bWVudApBbWVuaXR5ICIwLi4xIiAtLSAiMC4ubiIgUHJvcGVydHlBbWVuaXR5ClByb3BlcnR5ICIwLi4xIiAtLSAiMC4ubiIgUHJvcGVydHlBbWVuaXR5ClByb3BlcnR5ICIwLi4xIiAtLSAiMC4ubiIgUHJvcGVydHlEb2N1bWVudApQcm9wZXJ0eU1hbmFnZXIgIjAuLjEiIC0tICIwLi5uIiBQcm9wZXJ0eU1hbmFnZXJBc3NpZ25tZW50ClByb3BlcnR5ICIwLi4xIiAtLSAiMC4ubiIgUHJvcGVydHlNYW5hZ2VyQXNzaWdubWVudApUZW5hbnQgIjAuLjEiIC0tICIwLi5uIiBUZW5hbnRIaXN0b3J5ClByb3BlcnR5ICIwLi4xIiAtLSAiMC4ubiIgVXRpbGl0eQ==)
