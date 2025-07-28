@@ -6,7 +6,7 @@ SQLite database with sample real estate data and management tools.
 
 - `src/create_db.py` - Creates and populates the database with sample data
 - `src/run_query.py` - Example query to find top tenant by rent paid
-- `src/generate_schema.py` - Generates visual database schema diagrams
+- `src/generate_diagram.py` - Generates visual database diagrams
 - `database/real_estate.db` - SQLite database file
 
 ## Requirements
